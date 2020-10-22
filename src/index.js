@@ -3,6 +3,7 @@ require("./db/mongoose"); //even if not calling in this file, this ensures mongo
 const userRouter = require("./routers/user");
 const taskRouter = require("./routers/task");
 const commentRouter = require("./routers/comment");
+const cors = require("cors");
 
 const app = express();
 const port = process.env.PORT;
@@ -19,11 +20,18 @@ app.use((req, res, next) => {
   }
 });
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin: http://localhost:3001");
+//   res.header(
+//     "Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS"
+//   );
+//   res.header(
+//     "Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token"
+//   );
+//   next();
+// });
+
+app.use(cors({origin:"https://comment-generator-915.netlify.app/"}));
 
 app.use(express.json()); //for parsing JSON in body of POST request
 
