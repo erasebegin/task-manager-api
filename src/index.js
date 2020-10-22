@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 //   next();
 // });
 
-app.use(cors({origin:"https://comment-generator-915.netlify.app/"}));
+app.use(cors());
 
 app.use(express.json()); //for parsing JSON in body of POST request
 
