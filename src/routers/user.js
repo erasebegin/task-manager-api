@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/user");
 const auth = require("../middleware/auth");
+const cors = require("cors")
 
 //create new router
 const router = new express.Router();
@@ -21,7 +22,7 @@ router.post("/users", async (req, res) => {
 });
 
 //LOG IN
-router.post("/users/login", async (req, res) => {
+router.post("/users/login", cors(), async (req, res) => {
   try {
     const user = await User.findByCredentials(
       req.body.email,
