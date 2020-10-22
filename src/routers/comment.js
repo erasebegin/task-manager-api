@@ -1,5 +1,5 @@
 const express = require("express");
-const Comment = require("../models/comment.js");
+const Comment = require("/home/chris/task-manager-api/src/models/comment.js");
 
 const auth = require("../middleware/auth");
 
@@ -9,12 +9,12 @@ const router = new express.Router();
 //GET COMMENTS FOR AUTHENTICATED USER
 // GET /tasks?type=grammar
 router.get("/comments", auth, async (req, res) => {
-  const matchData = {};
-    matchData.type = req.query.type
+  // const matchData = {};
+  // req.query.type ? (matchData.type = req.query.type) : (matchData = {});
   try {
     //alternatively: const tasks = await Task.find({ author: req.user._id });
     await req.user
-      .populate({ path: "usercomments", match: matchData })
+      .populate({ path: "usercomments" })
       .execPopulate();
     res.send(req.user.usercomments);
   } catch (err) {
@@ -39,7 +39,6 @@ router.post("/comments", auth, async (req, res) => {
     res.send(err);
   }
 });
-
 
 // //FIND TASK BY ID
 // router.get("/tasks/:id", async (req, res) => {
