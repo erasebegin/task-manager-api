@@ -7,14 +7,14 @@ const Task = require("./task");
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
-    age: {
-      type: Number,
-      validate(value) {
-        if (value < 0) {
-          throw new Error("Age must be a positive integer");
-        }
-      },
-    },
+    // age: {
+    //   type: Number,
+    //   validate(value) {
+    //     if (value < 0) {
+    //       throw new Error("Age must be a positive integer");
+    //     }
+    //   },
+    // },
     email: {
       required: true,
       type: String,
@@ -60,6 +60,13 @@ const userSchema = new mongoose.Schema(
 userSchema.virtual("usertasks", {
   //first name the virtual property (usertasks) then add a reference to the data
   ref: "Task",
+  localField: "_id", //this is the field in this collection that is common to both collections
+  foreignField: "author", //this is the field in the linked-to collection that is common to both collections
+});
+
+userSchema.virtual("usercomments", {
+  //first name the virtual property (usertasks) then add a reference to the data
+  ref: "Comment",
   localField: "_id", //this is the field in this collection that is common to both collections
   foreignField: "author", //this is the field in the linked-to collection that is common to both collections
 });
