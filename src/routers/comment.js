@@ -1,5 +1,5 @@
 const express = require("express");
-const Comment = require("/home/chris/task-manager-api/src/models/comment.js");
+const Comment = require("../models/comment.js");
 
 const auth = require("../middleware/auth");
 
