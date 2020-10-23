@@ -22,7 +22,7 @@ router.post("/users", async (req, res) => {
 });
 
 //LOG IN
-router.post("/users/login", cors(), async (req, res) => {
+router.post("/users/login", async (req, res) => {
   try {
     const user = await User.findByCredentials(
       req.body.email,
