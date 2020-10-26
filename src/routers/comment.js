@@ -1,5 +1,7 @@
 const express = require("express");
-const Comment = require("/home/chris/task-manager-api/src/models/comment.js");
+const path = require("path");
+const commentPath = path.join(__dirname,"../models/comment")
+const Comment = require(commentPath);
 
 const auth = require("../middleware/auth");
 
@@ -13,9 +15,7 @@ router.get("/comments", auth, async (req, res) => {
   // req.query.type ? (matchData.type = req.query.type) : (matchData = {});
   try {
     //alternatively: const tasks = await Task.find({ author: req.user._id });
-    await req.user
-      .populate({ path: "usercomments" })
-      .execPopulate();
+    await req.user.populate({ path: "usercomments" }).execPopulate();
     res.send(req.user.usercomments);
   } catch (err) {
     res.status(500);
@@ -58,35 +58,35 @@ router.post("/comments", auth, async (req, res) => {
 
 // //UPDATE TASK DATA
 
-// router.patch("/tasks/:id", auth, async (req, res) => {
-//   const updates = Object.keys(req.body);
-//   const allowedToUpdate = ["description", "completed"];
-//   const isValidUpdate = updates.every((value) =>
-//     allowedToUpdate.includes(value)
-//   );
+router.patch("/comments/:id", auth, async (req, res) => {
+  const updates = Object.keys(req.body);
+  const allowedToUpdate = ["description"];
+  const isValidUpdate = updates.every((value) =>
+    allowedToUpdate.includes(value)
+  );
 
-//   if (!isValidUpdate) {
-//     res.status(400);
-//     return res.send({ error: "That is not a valid field" });
-//   }
+  if (!isValidUpdate) {
+    res.status(400);
+    return res.send({ error: "That is not a valid field" });
+  }
 
-//   try {
-//     const id = req.params.id;
-//     const task = await Task.findOne({ _id: id, author: req.user._id });
+  try {
+    const id = req.params.id;
+    const comment = await Comment.findOne({ _id: id, author: req.user._id });
 
-//     if (!task) {
-//       return res.status(404).send("Task not found");
-//     }
+    if (!task) {
+      return res.status(404).send("Task not found");
+    }
 
-//     updates.forEach((update) => (task[update] = req.body[update]));
+    updates.forEach((update) => (comment[update] = req.body[update]));
 
-//     res.status(200);
-//     res.send(task);
-//   } catch (err) {
-//     res.status(500);
-//     res.send(err);
-//   }
-// });
+    res.status(200);
+    res.send(comment);
+  } catch (err) {
+    res.status(500);
+    res.send(err);
+  }
+});
 
 // //DELETE TASKS
 // router.delete("/tasks/:id", auth, async (req, res) => {

@@ -1,7 +1,6 @@
 const express = require("express");
 const User = require("../models/user");
 const auth = require("../middleware/auth");
-const cors = require("cors")
 
 //create new router
 const router = new express.Router();
@@ -35,6 +34,8 @@ router.post("/users/login", async (req, res) => {
   }
 });
 
+//LOG OUT
+
 router.post("/users/logout", auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
@@ -47,6 +48,8 @@ router.post("/users/logout", auth, async (req, res) => {
     res.status(500).send();
   }
 });
+
+//LOG OUT ALL
 
 router.post("/users/logoutAll", auth, async (req, res) => {
   try {
