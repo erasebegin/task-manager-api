@@ -88,21 +88,21 @@ router.patch("/comments/:id", auth, async (req, res) => {
   }
 });
 
-// //DELETE TASKS
-// router.delete("/tasks/:id", auth, async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     const task = await Task.findOneAndDelete({ _id: id, author: req.user._id });
-//     if (!task) {
-//       return res.status(404).send("This task does not appear to exist");
-//     }
+//DELETE COMMENTS
+router.delete("/comments/:id", auth, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const comment = await Comment.findOneAndDelete({ _id: id, author: req.user._id });
+    if (!comment) {
+      return res.status(404).send("This task does not appear to exist");
+    }
 
-//     res.status(200);
-//     res.send(task);
-//   } catch (err) {
-//     res.status(500);
-//     res.send(err);
-//   }
-// });
+    res.status(200);
+    res.send({success:"comment deleted"});
+  } catch (err) {
+    res.status(500);
+    res.send(err);
+  }
+});
 
 module.exports = router;
