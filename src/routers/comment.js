@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const commentPath = path.join(__dirname,"../models/comment")
+const commentPath = path.join(__dirname, "../models/comment");
 const Comment = require(commentPath);
 
 const auth = require("../middleware/auth");
@@ -59,6 +59,7 @@ router.post("/comments", auth, async (req, res) => {
 // //UPDATE TASK DATA
 
 router.patch("/comments/:id", auth, async (req, res) => {
+  console.log("body: ", req.body);
   const updates = Object.keys(req.body);
   const allowedToUpdate = ["description"];
   const isValidUpdate = updates.every((value) =>
@@ -71,14 +72,17 @@ router.patch("/comments/:id", auth, async (req, res) => {
   }
 
   try {
-    const id = req.params.id;
-    const comment = await Comment.findOne({ _id: id, author: req.user._id });
+    console.log("id: ", req.params.id);
 
-    if (!task) {
+    const comment = await Comment.findByIdAndUpdate(
+      { _id: req.params.id, author: req.user._id },
+      { description: req.body.description },
+      { new: true }
+    );
+
+    if (!comment) {
       return res.status(404).send("Task not found");
     }
-
-    updates.forEach((update) => (comment[update] = req.body[update]));
 
     res.status(200);
     res.send(comment);
@@ -92,13 +96,16 @@ router.patch("/comments/:id", auth, async (req, res) => {
 router.delete("/comments/:id", auth, async (req, res) => {
   try {
     const id = req.params.id;
-    const comment = await Comment.findOneAndDelete({ _id: id, author: req.user._id });
+    const comment = await Comment.findOneAndDelete({
+      _id: id,
+      author: req.user._id,
+    });
     if (!comment) {
       return res.status(404).send("This task does not appear to exist");
     }
 
     res.status(200);
-    res.send({success:"comment deleted"});
+    res.send({ success: "comment deleted" });
   } catch (err) {
     res.status(500);
     res.send(err);
